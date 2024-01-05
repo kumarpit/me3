@@ -1,0 +1,258 @@
+---
+title: "Implementing proper tail calls in C"
+publishDate: "08 Nov 2023"
+description: "This article explains trampolining - a technique that is used to implement tail calls in languages that does not support them"
+tags: ["Racket"]
+---
+
+> In some circles, you will hear proper tail calls referred to as "tail call optimization". I think this name is terrible: omitting unnecessary and stupid behaviour (like accumulating stack at every tail call) is hardly what I'd consider an "optimization": it's simply good principled design.
+ -- Ron Garcia
+
+Tails calls are the recursive calls that are executed as the last statement of procedure. Consider the following Racket (PLAI) program to sum up the elements of a list of numbers.
+
+```racket
+;; (listof Number) -> Number
+;; produce the sum of all elements of lon
+(define (sum lon)
+  (cond
+    [(empty? lon) 0]
+    [else (+ (first lon)
+             (sum (rest lon)))]))
+
+(test (sum (list)) 0)
+(test (sum (list 1)) 1)
+(test (sum (list 1 2 3)) 6)
+```
+
+After the first call to `sum`, our computation can be expressed as `(+ 1 (sum (list 2 3)))`. After the second call, we get `(+ 1 (+ 2 (sum (list 3))))` and so on until the base case (i.e the empty list) is reached. Notice how on each call, the `+` operation needs to wait for the recursive call to return a value, resulting in this ever growing context of pending computations. This becomes clearer when we trace the execution of `sum`.
+
+```racket
+>(sum '(1 2 3))
+> (sum '(2 3))
+> >(sum '(3))
+> > (sum '())
+< < 0
+< <3
+< 5
+<6
+```
+
+Notice how each recursive call has to "wait" for all subsequent recursive calls to return before being able to compute a value. This buildup is not ideal. This was just a small example, but imagine if our list was infinitely long - we would run out of stack space well before we are able to evaluate our result. Understanding tail recursion can help us avoid this unneccesary build up on the stack. Consider the following modified `sum` procedure.
+
+```racket
+;; (listof Number) -> Number
+;; produce the sum of all elements of lon
+(define (sum lon)
+  ;; Accumulator: acc is Number
+  ;; Invariant: represents the sum so far (i.e sum of
+  ;;            all elements before the current element
+  ;;            in consideration)
+  (local [(define (sum-acc lon acc)
+            (cond
+              [(empty? lon) acc]
+              [else (sum-acc (rest lon)  ;; <-- this is a recursive call at 
+                                         ;;     a tail position
+                             (+ (first lon) acc))]))]
+    (sum-acc lon 0)))
+
+(test (sum (list)) 0)
+(test (sum (list 1)) 1)
+(test (sum (list 1 2 3)) 6)
+```
+
+Here, we use an accumlator to store the sum so far. This means that we no longer need to store our context of pending computations in the stack and our recursive calls don't need to "wait" for subsequent recursive calls to be able to compute a value. The trace of `sum-acc` reflects this change.
+
+```racket
+;; notice how the recursive calls are no longer nested
+>(sum-acc '(1 2 3) 0)
+>(sum-acc '(2 3) 1)
+>(sum-acc '(3) 3)
+>(sum-acc '() 6)
+<6
+```
+
+Racket has "proper" tail calls, i.e it does not accumulate any stack space when making a recursive call that appears at a tail position. This means that the following Racket program will simply run forever.
+
+```racket
+(define (tick) (begin
+                 (displayln 'tick)
+                 (tock)))
+(define (tock) (begin
+                 (displayln 'tock)
+                 (tick))) 
+(tick)
+```
+
+
+C, on the other hand, still accumulates stack space even with tail recursive procedures. This means that an equivalent program to the above in C will terminate with a stack overflow error. This article discusses how we can implement "proper" tail calls in C so that procedures like "tick-tock" will run forever instead of blowing the stack. Our discussion will consider the [Euclidean algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm), a fundamental recursive algorithm to find the greatest common divisor of two integers. Following is an implementation of the Euclidean algorithm in Racket.
+
+```racket
+;; Natural Natural -> Natural
+;; runs the Euclidean algorithm on scalars a and b
+(define (euclid-alg a b)
+  (if (> b a)
+      (euclid-alg b a)
+      (if (= b 0)
+          a
+          (euclid-alg b (modulo a b)))))
+
+(test (euclid-alg 87 1) 1)
+(test (euclid-alg 10 2) 2)
+(test (euclid-alg 3 7) 1)
+(test (euclid-alg 24 30) 6)
+```
+
+We will emplpy a technique called "trampolining" to translate the tail calls of `euclid-alg` in C. The idea is simple - instead of recursing, we modify our algorithm to return a "thunk", i.e a procedure that encapsulates the rest of the work to be done. A trampoline scheduler is run that calls the thunks returned until it reaches the end of the computation. The following diagram should help build intuition as to why this technique is called "trampolining".
+
+@TODO!!!
+
+Okay, now we will modify `euclid-alg` to use a trampoline. To do we define the following types and procedures.
+
+```racket
+(define-type trampoline
+  [bounce [p procedure?]]
+  [dismount [v (λ (x) #t)]])
+
+;; (trampolineof X) is one of:
+;; - (bounce ( -> (trampolineof X)))
+;; - (dismount X)
+;; interp.  A 
+
+(define (fn-for-trampoline t)
+  (type-case trampoline t
+    [bounce (p) (... (fn-for-trampoline (p)))]
+    [dismount (v) (... v)]))
+
+;; (trampolineof X) -> X
+;; run the given trampoline to completion
+(define (mount-trampoline t)
+  (type-case trampoline t
+    [bounce (p) (mount-trampoline (p))]
+    [dismount (v) v]))
+
+```
+
+Now, all recursive calls are replaced with a bounce and all base cases are replaced with a dismount.
+
+```racket
+;; Natural Natural -> (trampolineof Natural)
+;; runs the Euclidean algorithm on scalars a and b
+(define (euclid-alg a b)
+  (local [(define (euclid-alg/t a b) 
+  (if (> b a)
+      (bounce (λ () (euclid-alg/t b a)))
+      (if (= b 0)
+          (dismount a)
+          (bounce (λ () (euclid-alg/t b (modulo a b)))))))]
+    (mount-trampoline (euclid-alg/t a b))))
+```
+
+Notice that we pass lambdas to our bounce constructor. C does not have lambdas, and so we aren't quite ready to translate this racket code to C. We need to "defunctionalize" our code to get rid of any first-class functions. Defunctionalization entails two key steps:
+- Abstract function (lambda) application
+- Abstract lambda expression construction
+
+The only place were we apply the lambdas of our bounce structures is in the mount trampoline procedure. So, we create a new `apply/th` (read: apply thunk) procedure.
+
+```racket
+
+(define (apply/th th)
+  (match th
+    [p #:when (procedure? p) (p)]))
+
+;; (trampolineof X) -> X
+;; run the given trampoline to completion
+(define (mount-trampoline t)
+  (type-case trampoline t
+    [bounce (p) (mount-trampoline (apply/th p))]
+    [dismount (v) v]))
+
+```
+
+Now we need to abstract away the construction of our lambda expressions.
+
+```racket
+;; Natural Natural -> ( -> (trampolineof Natural))
+;; returns the thunk encapsulating the work to be done for the b>a case
+(define (b>a/th a b)
+  (λ () (euclid-alg/t b a)))
+
+;; Natural Natural -> ( -> (trampolineof Natural))
+;; returns the thunks encapsulating the work to be done for the case when b<a and 
+;; b != 0
+(define (a-mod-b/th a b)
+  (λ () (euclid-alg/t b (modulo a b))))
+
+;; Natural Natural -> ( -> (trampolineof Natural))
+;; trampolined euclid-alg
+(define (euclid-alg/t a b) 
+  (if (> b a)
+      (bounce (b>a/th a b))
+      (if (= b 0)
+          (dismount a)
+          (bounce (a-mod-b/th a b)))))
+```
+
+Notice that we had to pull out the `euclid-alg/t` procedure from within the lambda in order to create the `b>a/th` and `a-mod-b/th` procedures. Now we are setup to get rid of thunks altogether. We introduce a new type `euclid-alg/th`.
+
+```racket
+(define-type euclid-alg/th
+  [b>a (a number?) (b number?)]
+  [a-mod-b (a number?) (b number?)])
+```
+
+We will treat our `apply/th` as a dispatch function. Everything works together as follows.
+
+```racket
+(define-type trampoline
+  [bounce [p thunk?]]
+  [dismount [v (λ (x) #t)]])
+
+(define-type thunk
+  [b>a (a number?) (b number?)]
+  [a-mod-b (a number?) (b number?)])
+
+;; Thunk -> (trampolineof Natural)
+;; dispatches the appropriate thunk for euclid-alg
+(define (apply/th th)
+  (type-case thunk th
+    [b>a (a b) (euclid-alg/t b a)]
+    [a-mod-b (a b) (euclid-alg/t b (modulo a b))]))
+
+;; (trampolineof X) -> X
+;; run the given trampoline to completion
+(define (mount-trampoline t)
+  (type-case trampoline t
+    [bounce (p) (mount-trampoline (apply/th p))]
+    [dismount (v) v]))
+
+;; Natural Natural -> Thunk
+;; returns the thunk encapsulating the work to be done for the b>a case
+(define (b>a/th a b)
+  (b>a a b))
+
+;; Natural Natural -> Thunk
+;; returns the thunks encapsulating the work to be done for the case when b<a and 
+;; b != 0
+(define (a-mod-b/th a b)
+  (a-mod-b a b))
+
+;; Natural Natural -> ( -> (trampolineof Natural))
+;; trampolined euclid-alg
+(define (euclid-alg/t a b) 
+  (if (> b a)
+      (bounce (b>a/th a b))
+      (if (= b 0)
+          (dismount a)
+          (bounce (a-mod-b/th a b)))))
+
+;; Natural Natural -> (trampolineof Natural)
+;; runs the Euclidean algorithm on scalars a and b
+(define (euclid-alg a b)
+    (mount-trampoline (euclid-alg/t a b)))
+```
+
+Now we have a trampolined version of the Euclidean algorithm implementation, without any first class functions! We can translate this to C. 
+
+
+
+@TODO!!!

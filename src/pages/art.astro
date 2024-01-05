@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+
+import PageLayout from "@/layouts/Base";
+import aboutImg from "@/assets/oldman.jpg";
+
+const meta = {
+	title: "Art",
+	description: "Some art I made.",
+};
+---
+
+<PageLayout meta={meta}>
+	<div class="space-y-6">
+		<h1 class="title">Art</h1>
+		<div class="flex justify-center">
+			<Image
+				src={aboutImg}
+				alt="A cartoon cactus looking at the 'Astro.build' logo"
+				loading="eager"
+				fetchpriority="high"
+				width={400}
+			/>
+		</div>
+	</div>
+</PageLayout>

@@ -1,0 +1,31 @@
+---
+title: "Implementing the simply-typed lambda calculus"
+publishDate: "02 Jan 2024"
+description: "Build an interpreter for the simply-typed lambda calculus in Racket"
+tags: ["Racket", "Interpreters"]
+---
+The _lambda calculus_ is a formal system invented by Alonzo Church in 1920s wherein all computation is reduced to the basic operations of function definition and application. It can simultaneously be viewed as a simple programming language. 
+
+> As "PL people" we're often in search of minimalism, and so we should ask if there is a simpler way to get "real" computation. One potential answer, which comes to us from Alonzo Church in the 1920s, via John McCarthy in the 1950s and Peter Landin in the 1960s, is the lambda calculus. As the name suggests, it's a core calculus for computation. It's dead simple—just three syntactic forms and three small-step rules or two big-step rules. And yet despite this simplicity, the lambda calculus is Turing complete!  
+-- James Bornholt
+
+
+Let's consider the untyped, or pure, lambda calculus first. A term `t` in the lambda calculus is one of three forms:
+```
+t := x      --> variable
+   | λx. t  --> lambda abstraction
+   | t t    --> application
+```
+
+Since variables and abstractions are values in the lambda calculus, only the application case can step - $$\beta$$-reduction. To make it easier to work with lambda calculus, we introduce a few extensions:
+
+```
+t := x     
+   | λx. t 
+   | t t   
+   | true
+   | false
+   | if t then t else t
+```
+
+

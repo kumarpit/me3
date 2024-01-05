@@ -8,7 +8,7 @@ const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
-const cactusTech: Array<{ title: string; desc: string; org: string; href: string }> = [
+const experiences: Array<{ title: string; desc: string; org: string; href: string }> = [
 	{
 		title: "Site Reliability Engineering Intern",
 		org: "Visier",
@@ -20,6 +20,24 @@ const cactusTech: Array<{ title: string; desc: string; org: string; href: string
 		org: "Vidyard",
 		desc: "Winter 2023",
 		href: "https://docs.astro.build/en/guides/assets/",
+	},
+];
+
+const projects: Array<{ title: string; desc: string; href: string }> = [
+	{
+		title: "Backtrack",
+		desc: "A generalized search library for node.js",
+		href: "#",
+	},
+	{
+		title: "Star-Crossed",
+		desc: "A 2D top-down bullet hell (and dating sim?) in Unity",
+		href: "#",
+	},
+	{
+		title: "Basis",
+		desc: "A linear algebra library for C",
+		href: "#",
 	},
 ];
 ---
@@ -34,8 +52,10 @@ const cactusTech: Array<{ title: string; desc: string; org: string; href: string
 			<br />
 			<br />
 			 I'm interested in learning about system design, language-oriented programming and graphics.
-			In my free time, I'm exploring game development in Unity at UBC GameDev and contributing to
-			UBC Bionics as an embedded software developer.
+			In my free time, I'm exploring game development in Unity at <span class="cactus-link"
+				>UBC GameDev</span
+			> and contributing to
+			<span class="cactus-link">UBC Bionics</span> as an embedded software developer.
 		</p>
 		<SocialList />
 	</section>
@@ -43,7 +63,7 @@ const cactusTech: Array<{ title: string; desc: string; org: string; href: string
 		<h2 class="title mb-4 text-xl">Experience</h2>
 		<ul class="space-y-4 sm:space-y-2">
 			{
-				cactusTech.map(({ href, title, org, desc }) => (
+				experiences.map(({ href, title, org, desc }) => (
 					<li class="flex flex-col gap-x-2 sm:flex-row">
 						<p class="min-w-[120px] text-gray-600 dark:text-gray-400">{desc}</p>
 						<p>
@@ -62,6 +82,30 @@ const cactusTech: Array<{ title: string; desc: string; org: string; href: string
 			}
 		</ul>
 	</section>
+
+	<section class="mt-10">
+		<h2 class="title mb-4 text-xl">Featured Projects</h2>
+		<ul class="space-y-4 sm:space-y-2">
+			{
+				projects.map(({ title, desc, href }) => (
+					<li class="flex flex-col gap-x-2 sm:flex-row">
+						<div class="min-w-[120px]">
+							<a
+								href={href}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="cactus-link inline-block"
+							>
+								{title}
+							</a>
+						</div>
+						<p>{desc}</p>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
 	<section aria-label="Blog post list" class="mt-10">
 		<h2 class="title mb-4 text-xl">Posts</h2>
 		<ul class="space-y-4 sm:space-y-2">

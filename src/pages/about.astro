@@ -1,8 +1,5 @@
 ---
-import { Image } from "astro:assets";
-
 import PageLayout from "@/layouts/Base";
-import aboutImg from "@/assets/me.jpeg";
 
 const meta = {
 	title: "About",
@@ -14,12 +11,12 @@ const meta = {
 	<div class="space-y-6">
 		<h1 class="title">About</h1>
 		<div class="flex justify-center">
-			<Image
+			<!-- <Image
 				src={aboutImg}
 				alt="A cartoon cactus looking at the 'Astro.build' logo"
 				loading="eager"
 				fetchpriority="high"
-			/>
+			/> -->
 		</div>
 		<p>
 			Hi, I'm Arpit. I am in my fourth year at UBC, majoring in Mathematics and Computer Science. I
@@ -30,14 +27,15 @@ const meta = {
 			gotten into running as well.
 		</p>
 		<p>
-			I am currently interning at <span class="cactus-link">Visier</span> as a Site Reliability
-			Engineer. I am excited to learn as much as I can in the 8 months I am there. I have also
-			interned at <span class="cactus-link">Vidyard</span> as a Software Engineering Intern on the
-			Upgrade team. There, I worked with Ruby on Rails and contributed to the migration from Zuora
-			to Stripe.
+			I am currently interning at <a href="https://www.visier.com" class="cactus-link">Visier</a> as
+			a Site Reliability Engineer. I am excited to learn as much as I can in the 8 months I am
+			there. I have also interned at <a href="https://www.vidyard.com" class="cactus-link"
+				>Vidyard</a
+			> as a Software Engineering Intern on the Upgrade team. There, I worked with Ruby on Rails and
+			contributed to the migration from Zuora to Stripe.
 		</p>
 		<p>
-			My goals in life are rather simple - I just want continuously push the limits of my
+			My goals in life are rather simple. I just want to continuously push the limits of my
 			capabilities and learn as much as I can from the extremely talented people I have the fortune
 			of conversing with. I hope to be a productive and impactful software engineer capable of
 			leading large-scale projects - but more importantly, I hope I can bring some positivity and

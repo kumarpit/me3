@@ -17,7 +17,9 @@ t := x      --> variable
    | t t    --> application
 ```
 
-Since variables and abstractions are values in the lambda calculus, only the application case can step - $$\beta$$-reduction. To make it easier to work with lambda calculus, we introduce a few extensions:
+Since variables and abstractions are values in the lambda calculus, only the application case can step - $$\beta$$-reduction. As noted above, a language consisting of just these constructs is Turing complete. One can informally justify this by mentioning that number can be represented by Church numerals, recursion can be implemented using fixed-point combinators and booleans can be encoded using lambdas. This is all out of scope for this article, but I would provide resources to get a better understanding of these concepts. 
+
+To make it easier to work with lambda calculus, we introduce a few extensions - namely, booleans and conditional expressions:
 
 ```
 t := x     
@@ -27,5 +29,20 @@ t := x
    | false
    | if t then t else t
 ```
+
+@TODO: Define step rules
+
+Let's consider the untyped, or pure, lambda calculus and start with an interpreter for it instead. We need to define the "tokens", i.e our internal representation of lanuage.
+```
+(define-type Simple
+  [var (v identifier?)]
+  [bool (b boolean?)]
+  [sif (pred Simple?) (conseq Simple?) (altern Simple?)]  ;; if is a Racket keyword
+  [fun (argType Type?) (i identifier?) (body Simple?)]
+  [app (ratr Simple?) (rand Simple?)])
+```
+
+Implementing a parser is straightforward using Racket's match functionality. We will implement an environment-passing interpreter. Notice that we do not have named functions, hence the only identifiers we need to keep track of are the arguments.
+
 
 

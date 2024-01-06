@@ -1,5 +1,7 @@
 ---
 import PageLayout from "@/layouts/Base";
+import { Image } from "astro:assets";
+import meImg from "@/assets/me.jpg";
 
 const meta = {
 	title: "About",
@@ -12,7 +14,7 @@ const meta = {
 		<h1 class="title">About</h1>
 		<div class="flex justify-center">
 			<!-- <Image
-				src={aboutImg}
+				src={meImg}
 				alt="A cartoon cactus looking at the 'Astro.build' logo"
 				loading="eager"
 				fetchpriority="high"

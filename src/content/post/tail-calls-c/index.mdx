@@ -8,6 +8,7 @@ tags: ["Racket"]
 > In some circles, you will hear proper tail calls referred to as "tail call optimization". I think this name is terrible: omitting unnecessary and stupid behaviour (like accumulating stack at every tail call) is hardly what I'd consider an "optimization": it's simply good principled design.
  -- Ron Garcia
 
+## What are tail calls?
 Tails calls are the recursive calls that are executed as the last statement of procedure. Consider the following Racket (PLAI) program to sum up the elements of a list of numbers.
 
 ```racket
@@ -102,6 +103,7 @@ C, on the other hand, still accumulates stack space even with tail recursive pro
 (test (euclid-alg 24 30) 6)
 ```
 
+## Trampolining
 We will emplpy a technique called "trampolining" to translate the tail calls of `euclid-alg` in C. The idea is simple - instead of recursing, we modify our algorithm to return a "thunk", i.e a procedure that encapsulates the rest of the work to be done. A trampoline scheduler is run that calls the thunks returned until it reaches the end of the computation. The following diagram should help build intuition as to why this technique is called "trampolining".
 
 @TODO!!!
@@ -147,6 +149,7 @@ Now, all recursive calls are replaced with a bounce and all base cases are repla
     (mount-trampoline (euclid-alg/t a b))))
 ```
 
+## Defunctionalization
 Notice that we pass lambdas to our bounce constructor. C does not have lambdas, and so we aren't quite ready to translate this racket code to C. We need to "defunctionalize" our code to get rid of any first-class functions. Defunctionalization entails two key steps:
 - Abstract function (lambda) application
 - Abstract lambda expression construction

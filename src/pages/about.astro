@@ -12,30 +12,36 @@ const meta = {
 <PageLayout meta={meta}>
 	<div class="space-y-6">
 		<h1 class="title">About</h1>
-		<div class="flex justify-center">
-			<!-- <Image
+		<div class="flex flex-col-reverse justify-center gap-2 sm:flex-row">
+			<div>
+				<p>
+					Hi, I'm Arpit. I am in my fourth year at UBC, majoring in Mathematics and Computer
+					Science. I find these disciplines fascinating and greatly rewarding - there are only a few
+					things in life that feel as good as figuring out a proof or coming up with a neat
+					algorithm. I also enjoy building software and am always learning about new technologies
+					and elegant implementation strategies. Outside of school, I am interested in art and
+					weightlifting. Recently, I have gotten into running as well.
+				</p>
+				<br />
+				<p>
+					I am currently interning at <a href="https://www.visier.com" class="cactus-link">Visier</a
+					>
+					 as a Site Reliability Engineer. I am excited to learn as much as I can in the 8 months I
+					am there. I have also interned at <a href="https://www.vidyard.com" class="cactus-link"
+						>Vidyard</a
+					> as a Software Engineering Intern on the Upgrade team. There, I worked with Ruby on Rails
+					and contributed to the migration from Zuora to Stripe.
+				</p>
+			</div>
+			<Image
 				src={meImg}
 				alt="A cartoon cactus looking at the 'Astro.build' logo"
 				loading="eager"
 				fetchpriority="high"
-			/> -->
+				height={400}
+				class="mb-4 sm:mb-0"
+			/>
 		</div>
-		<p>
-			Hi, I'm Arpit. I am in my fourth year at UBC, majoring in Mathematics and Computer Science. I
-			find these disciplines fascinating and greatly rewarding - there are only a few things in life
-			that feel as good as figuring out a proof or coming up with a neat algorithm. I also enjoy
-			building software and am always learning about new technologies and elegant implementation
-			strategies. Outside of school, I am interested in art and weightlifting. Recently, I have
-			gotten into running as well.
-		</p>
-		<p>
-			I am currently interning at <a href="https://www.visier.com" class="cactus-link">Visier</a> as
-			a Site Reliability Engineer. I am excited to learn as much as I can in the 8 months I am
-			there. I have also interned at <a href="https://www.vidyard.com" class="cactus-link"
-				>Vidyard</a
-			> as a Software Engineering Intern on the Upgrade team. There, I worked with Ruby on Rails and
-			contributed to the migration from Zuora to Stripe.
-		</p>
 		<p>
 			My goals in life are rather simple. I just want to continuously push the limits of my
 			capabilities and learn as much as I can from the extremely talented people I have the fortune

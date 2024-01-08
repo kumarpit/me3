@@ -12,7 +12,7 @@ The _lambda calculus_ is a formal system invented by Alonzo Church in 1920s wher
 
 Let's consider the untyped, or pure, lambda calculus first. A term `t` in the lambda calculus is one of three forms:
 
-```
+```Racket
 t := x      --> variable
    | λx. t  --> lambda abstraction
    | t t    --> application
@@ -22,7 +22,7 @@ Since variables and abstractions are values in the lambda calculus, only the app
 
 To make it easier to work with lambda calculus, we introduce a few extensions - namely, booleans and conditional expressions:
 
-```
+```Racket
 t := x
    | λx. t
    | t t
@@ -35,7 +35,7 @@ t := x
 
 Let's consider the untyped, or pure, lambda calculus and start with an interpreter for it instead. We need to define the "tokens", i.e our internal representation of lanuage.
 
-```
+```Racket
 (define-type Simple
   [var (v identifier?)]
   [bool (b boolean?)]

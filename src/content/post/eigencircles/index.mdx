@@ -7,6 +7,11 @@ tags: ["Linear Algebra", "Math"]
 
 import { Image } from "astro:assets";
 import eigencircle from "@/assets/eigencircles/eigencircle.png";
+import eigencircle1 from "@/assets/eigencircles/eigencircle1.png";
+import eigencircle2 from "@/assets/eigencircles/eigencircle2.png";
+import eigencircle3 from "@/assets/eigencircles/eigencircle3.png";
+import eigencircle5 from "@/assets/eigencircles/eigencircle5.png";
+import eigencircle6 from "@/assets/eigencircles/eigencircle6.png";
 
 ## Introduction
 
@@ -123,7 +128,7 @@ these points define a rectangle.
 Defining the points $$F = (a,b), H = (a,-c), E = (d,-c), G = (d,b)$$, we get the following graph.
 
 <figure style="text-align: center">
-   <img src="../../assets/imgs/eigencircles/eigencircle1.png" alt="figure"/>
+   <Image src={eigencircle1} alt="eigencircle" />
    <figcaption class="small-text" style="padding-top: 0.5em">Figure 2: An eigencircle (assuming a < d and b < -c)</figcaption>
 </figure>
 
@@ -132,7 +137,7 @@ Defining the points $$F = (a,b), H = (a,-c), E = (d,-c), G = (d,b)$$, we get the
 This visualization has some very interesting properties. Firstly, notice that if $$(\lambda, 0)$$ lies on the circle, then $$\lambda$$ is an eigenvalue of $$A$$. Let $$L=(\lambda, 0)$$, then the vector $$\overrightarrow{LE}$$ is the corresponding eigenvector for $$\lambda$$.
 
 <figure style="text-align: center">
-	<img src="../../assets/imgs/eigencircles/eigencircle2.png" alt="figure" />
+	<Image src={eigencircle2} alt="eigencircle" />
 	<figcaption class="small-text" style="padding-top: 0.5em">
 		Figure 3: Determining eigenvectors from eigencircles
 	</figcaption>
@@ -158,7 +163,7 @@ Geometrically, the power of a point states that "[if some] line through any poin
 the circle."
 
 <figure style="text-align: center">
-	<img src="../../assets/imgs/eigencircles/eigencircle3.png" alt="figure" />
+	<Image src={eigencircle3} alt="eigencircle" />
 	<figcaption class="small-text" style="padding-top: 0.5em">
 		Figure 4: Power of a point theorem
 	</figcaption>
@@ -177,7 +182,7 @@ If we choose $$P = O = (0,0)$$, we get that $$\Pi(O) = \text{det}(A)$$! From Fig
 Finally, I am going to describe how the eigencircle relates to complex eigenvalues. Consider Figure 5a.
 
 <figure style="text-align: center">
-	<img src="../../assets/imgs/eigencircles/eigencircle5.png" alt="figure" />
+	<Image src={eigencircle5} alt="eigencircle" />
 	<figcaption class="small-text" style="padding-top: 0.5em">
 		Figure 5: Eigencircles and complex eigenvalues
 	</figcaption>
@@ -234,7 +239,7 @@ as required. Therefore, you can determine all (both real and complex) eigenvalue
 Visualizing the eigenvectors corresponding to complex eigenvalues would require an additional axis to account for the imaginary value. Let $$\lambda = f \pm ih$$ where $$h = YV$$. Consider Figure 6.
 
 <figure style="text-align: center">
-	<img src="src/assets/eigencircles/eigencircle6.png" alt="figure" />
+	<Image src={eigencircle6} alt="eigencircle" />
 	<figcaption class="small-text" style="padding-top: 0.5em">
 		Figure 6: Geometric representation of complex eigenvectors
 	</figcaption>

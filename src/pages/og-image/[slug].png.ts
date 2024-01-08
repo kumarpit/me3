@@ -6,8 +6,8 @@ import { Resvg } from "@resvg/resvg-js";
 import { siteConfig } from "@/site-config";
 import { getAllPosts, getFormattedDate } from "@/utils";
 
-import RobotoMono from "@/assets/roboto-mono-regular.ttf";
-import RobotoMonoBold from "@/assets/roboto-mono-700.ttf";
+import RobotoMono from "@/assets/fonts/roboto-mono-regular.ttf";
+import RobotoMonoBold from "@/assets/fonts/roboto-mono-700.ttf";
 
 const ogOptions: SatoriOptions = {
 	width: 1200,

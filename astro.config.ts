@@ -8,6 +8,14 @@ import rehypeExternalLinks from "rehype-external-links";
 import { remarkReadingTime } from "./src/utils/remark-reading-time";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import racketGrammar from "./src/assets/syntaxes/racket.tmLanguage.json";
+
+const racket = {
+	id: "Racket",
+	scopeName: "source.racket",
+	grammar: racketGrammar,
+	aliases: ["rkt", "racket"],
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,8 +29,9 @@ export default defineConfig({
 		],
 		remarkRehype: { footnoteLabelProperties: { className: [""] } },
 		shikiConfig: {
-			theme: "dracula",
+			theme: "slack-dark",
 			wrap: true,
+			langs: [racket],
 		},
 	},
 	integrations: [

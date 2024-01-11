@@ -25,12 +25,14 @@ export default {
 				link: "hsl(var(--theme-link) / <alpha-value>)",
 				accent: "hsl(var(--theme-accent) / <alpha-value>)",
 				"accent-2": "hsl(var(--theme-accent-2) / <alpha-value>)",
+				"accent-3": "hsl(var(--theme-accent-3) / <alpha-value>)",
 				quote: "hsl(var(--theme-quote) / <alpha-value>)",
 			},
 			fontFamily: {
 				// Add any custom fonts here
 				sans: [...fontFamily.sans],
 				serif: [...fontFamily.serif],
+				bricolage: ["Bricolage Grotesque", "sans-serif"],
 			},
 			transitionProperty: {
 				height: "height",

@@ -9,6 +9,9 @@ import { getAllPosts, getFormattedDate } from "@/utils";
 import RobotoMono from "@/assets/fonts/roboto-mono-regular.ttf";
 import RobotoMonoBold from "@/assets/fonts/roboto-mono-700.ttf";
 
+import QuicksandBold from "@/assets/fonts/Quicksand-Bold.otf";
+import Quicksand from "@/assets/fonts/Quicksand-Regular.otf";
+
 const ogOptions: SatoriOptions = {
 	width: 1200,
 	height: 630,
@@ -16,13 +19,13 @@ const ogOptions: SatoriOptions = {
 	fonts: [
 		{
 			name: "Roboto Mono",
-			data: Buffer.from(RobotoMono),
+			data: Buffer.from(Quicksand),
 			weight: 400,
 			style: "normal",
 		},
 		{
 			name: "Roboto Mono",
-			data: Buffer.from(RobotoMonoBold),
+			data: Buffer.from(QuicksandBold),
 			weight: 700,
 			style: "normal",
 		},

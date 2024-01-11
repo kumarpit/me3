@@ -19,13 +19,13 @@ const ogOptions: SatoriOptions = {
 	fonts: [
 		{
 			name: "Roboto Mono",
-			data: Buffer.from(Quicksand),
+			data: Buffer.from(RobotoMono),
 			weight: 400,
 			style: "normal",
 		},
 		{
 			name: "Roboto Mono",
-			data: Buffer.from(QuicksandBold),
+			data: Buffer.from(RobotoMonoBold),
 			weight: 700,
 			style: "normal",
 		},

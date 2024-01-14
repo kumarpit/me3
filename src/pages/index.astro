@@ -4,6 +4,10 @@ import PostPreview from "@/components/blog/PostPreview";
 import SocialList from "@/components/SocialList";
 import { getAllPosts, sortMDByDate } from "@/utils";
 
+import bookImg from "@/assets/books/fp-in-scala-manning.png";
+import bookImg2 from "@/assets/books/snow-crash-stephenson.jpg";
+import bookImg3 from "@/assets/books/plai-krishnamurthi.jpeg";
+
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
@@ -38,6 +42,155 @@ const projects: Array<{ title: string; desc: string; href: string }> = [
 		title: "Basis",
 		desc: "A linear algebra library for C",
 		href: "https://github.com/kumarpit/basis",
+	},
+];
+
+const books: Array<{ name: string; author: string; img: ImageMetadata }> = [
+	{
+		name: "Functional Programming in Scala",
+		author: "Manning",
+		img: bookImg,
+	},
+	{
+		name: "Snow Crash",
+		author: "Neal Stephenson",
+		img: bookImg2,
+	},
+	{
+		name: "Programming Languages: Application and Interpretation",
+		author: "Shriram Krishnamurthi",
+		img: bookImg3,
+	},
+];
+
+const courses: Array<{ name: string; coursePage: string }> = [
+	{
+		name: "CPSC110",
+		coursePage: "#",
+	},
+	{
+		name: "ECON101",
+		coursePage: "#",
+	},
+	{
+		name: "EOSC114",
+		coursePage: "#",
+	},
+	{
+		name: "MATH100",
+		coursePage: "#",
+	},
+	{
+		name: "WRDS150A",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC121",
+		coursePage: "#",
+	},
+	{
+		name: "ECON102",
+		coursePage: "#",
+	},
+	{
+		name: "MATH101",
+		coursePage: "#",
+	},
+	{
+		name: "VISA110",
+		coursePage: "#",
+	},
+	{
+		name: "PSYC101",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC221",
+		coursePage: "#",
+	},
+	{
+		name: "MATH221",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC213",
+		coursePage: "#",
+	},
+	{
+		name: "STAT200",
+		coursePage: "#",
+	},
+	{
+		name: "PHIL220A",
+		coursePage: "#",
+	},
+	{
+		name: "LING100",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC210",
+		coursePage: "#",
+	},
+	{
+		name: "MATH200",
+		coursePage: "#",
+	},
+	{
+		name: "MATH220",
+		coursePage: "#",
+	},
+	{
+		name: "MATH215",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC314",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC313",
+		coursePage: "#",
+	},
+	{
+		name: "MATH340",
+		coursePage: "#",
+	},
+	{
+		name: "MATH307",
+		coursePage: "#",
+	},
+	{
+		name: "MATH302",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC310",
+		coursePage: "#",
+	},
+	{
+		name: "CSPC311",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC317",
+		coursePage: "#",
+	},
+	{
+		name: "CSPC320",
+		coursePage: "#",
+	},
+	{
+		name: "MATH342",
+		coursePage: "#",
+	},
+	{
+		name: "MATH319",
+		coursePage: "#",
+	},
+	{
+		name: "MATH317",
+		coursePage: "#",
 	},
 ];
 ---
@@ -115,6 +268,28 @@ const projects: Array<{ title: string; desc: string; href: string }> = [
 				allPostsByDate.map((p) => (
 					<li class="flex flex-col gap-x-2 sm:flex-row">
 						<PostPreview post={p} />
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section aria-label="Bookshelf" class="mt-10">
+		<h2 class="title mb-4 text-xl">Bookshelf</h2>
+		<div class="flex flex-row gap-10" style="height: 10vw;">
+			{books.map((b) => <img src={b.img.src} alt={b.name} height="auto" width="auto" />)}
+		</div>
+	</section>
+
+	<section aria-label="Coursework" class="mt-10">
+		<h2 class="title mb-4 text-xl">Coursework</h2>
+		<ul class="flex flex-wrap gap-2 text-accent">
+			{
+				courses.map(({ name, coursePage }) => (
+					<li>
+						<a class="flex items-center justify-center rounded-lg p-1" href={coursePage}>
+							{name}
+						</a>
 					</li>
 				))
 			}

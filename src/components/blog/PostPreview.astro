@@ -12,11 +12,15 @@ const { post, as: Tag = "div", withDesc = false } = Astro.props;
 const postDate = post.data.updatedDate ?? post.data.publishDate;
 ---
 
-<FormattedDate date={postDate} class="min-w-[120px] text-gray-600 dark:text-gray-400" />
+<FormattedDate
+	date={postDate}
+	class="text-gray-600 dark:text-gray-400"
+	style={`min-width: ${withDesc ? "105px" : "120px"}`}
+/>
 <Tag>
 	{post.data.draft && <span class="text-red-500">(Draft) </span>}
 	<a href={`/posts/${post.slug}/`} class="cactus-link" data-astro-prefetch>
 		{post.data.title}
 	</a>
 </Tag>
-{withDesc && <p class="text-accent-3 line-clamp-3 block">{post.data.description}</p>}
+{withDesc && <p class="line-clamp-3 block text-accent-3">{post.data.description}</p>}

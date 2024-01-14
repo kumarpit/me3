@@ -7,6 +7,8 @@ import { getAllPosts, sortMDByDate } from "@/utils";
 import bookImg from "@/assets/books/fp-in-scala-manning.png";
 import bookImg2 from "@/assets/books/snow-crash-stephenson.jpg";
 import bookImg3 from "@/assets/books/plai-krishnamurthi.jpeg";
+import bookImg4 from "@/assets/books/crime-and-punishment-dostoevsky.webp";
+import bookImg5 from "@/assets/books/you-are-not-so-smart-mcraney.jpeg";
 
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
@@ -61,135 +63,177 @@ const books: Array<{ name: string; author: string; img: ImageMetadata }> = [
 		author: "Shriram Krishnamurthi",
 		img: bookImg3,
 	},
+	{
+		name: "Crime and Punishment",
+		author: "Fyodor Dostoevsky",
+		img: bookImg4,
+	},
+	{
+		name: "You are not so smart",
+		author: "David McRaney",
+		img: bookImg5,
+	},
 ];
 
-const courses: Array<{ name: string; coursePage: string }> = [
+const courses: Array<{ name: string; title: string; coursePage: string }> = [
 	{
 		name: "CPSC110",
+		title: "Computation, Programs, and Programming",
 		coursePage: "#",
 	},
 	{
 		name: "ECON101",
+		title: "Microeconomics",
 		coursePage: "#",
 	},
 	{
 		name: "EOSC114",
+		title: "The Catastrophic Earth: Natural Disasters",
 		coursePage: "#",
 	},
 	{
 		name: "MATH100",
+		title: "Calculus I",
 		coursePage: "#",
 	},
 	{
 		name: "WRDS150A",
+		title: "Writing and Research in the Disciplines",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC121",
+		title: "Models of Computation",
 		coursePage: "#",
 	},
 	{
 		name: "ECON102",
+		title: "Macroeconomics",
 		coursePage: "#",
 	},
 	{
 		name: "MATH101",
+		title: "Calculus II",
 		coursePage: "#",
 	},
 	{
 		name: "VISA110",
+		title: "Foundation Studio: Digital Media",
 		coursePage: "#",
 	},
 	{
 		name: "PSYC101",
+		title: "Introduction to Biological and Cognitive Psychology",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC221",
+		title: "Introductory Data Structures and Algorithms",
 		coursePage: "#",
 	},
 	{
 		name: "MATH221",
+		title: "Linear Algebra",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC213",
+		title: "Introduction to Computer Systems",
 		coursePage: "#",
 	},
 	{
 		name: "STAT200",
+		title: "Elementary Statistics for Applications",
 		coursePage: "#",
 	},
 	{
 		name: "PHIL220A",
+		title: "Symbolic Logic",
 		coursePage: "#",
 	},
 	{
 		name: "LING100",
+		title: "Introduction to Language and Linguistics",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC210",
+		title: "Software Construction",
 		coursePage: "#",
 	},
 	{
 		name: "MATH200",
+		title: "Calculus III",
 		coursePage: "#",
 	},
 	{
 		name: "MATH220",
+		title: "Mathematical Proof",
 		coursePage: "#",
 	},
 	{
 		name: "MATH215",
+		title: "Elementary Differential Equations I",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC314",
+		title: "Computer Graphics",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC313",
+		title: "Computer Hardware and Operating Systems",
 		coursePage: "#",
 	},
 	{
 		name: "MATH340",
+		title: "Linear Programming",
 		coursePage: "#",
 	},
 	{
 		name: "MATH307",
+		title: "Applied Linear Algebra",
 		coursePage: "#",
 	},
 	{
 		name: "MATH302",
+		title: "Introduction to Probability",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC310",
+		title: "Introduction to Software Engineering",
 		coursePage: "#",
 	},
 	{
 		name: "CSPC311",
+		title: "Definition of Programming Languages",
 		coursePage: "#",
 	},
 	{
 		name: "CPSC317",
+		title: "Computer Networking",
 		coursePage: "#",
 	},
 	{
 		name: "CSPC320",
+		title: "Intermediate Algorithm Design and Analysis",
 		coursePage: "#",
 	},
 	{
 		name: "MATH342",
+		title: "Algebra and Coding Theory",
 		coursePage: "#",
 	},
 	{
 		name: "MATH319",
+		title: "Real Analysis",
 		coursePage: "#",
 	},
 	{
 		name: "MATH317",
+		title: "Calculus IV",
 		coursePage: "#",
 	},
 ];
@@ -199,19 +243,22 @@ const courses: Array<{ name: string; coursePage: string }> = [
 	<section>
 		<h1 class="title mb-6">Hey! I'm Arpit.</h1>
 		<p class="mb-4">
-			I am a computer science and mathematics student at the University of British Columbia. Here I
-			write about my explorations in topics that interest me - usually pertaining to computer
-			science and mathematics. A lot on this site is still under construction.
+			I am a computer science and mathematics student at the <a
+				href="https://www.ubc.ca/"
+				class="external-link">University of British Columbia</a
+			>. Here I write about my explorations in topics that interest me - usually pertaining to
+			computer science and mathematics. A lot on this site is still under construction.
 			<br />
 			<br />
 			 I'm interested in learning about system design, language-oriented programming and graphics.
 			In my free time, I'm exploring game development in Unity at <a
 				href="https://www.ubcgamedev.com"
-				class="cactus-link">UBC GameDev</a
+				class="external-link">UBC GameDev</a
 			> and contributing to
-			<a href="https://ubcbionics.com" class="cactus-link">UBC Bionics</a> as an embedded software
+			<a href="https://ubcbionics.com" class="external-link">UBC Bionics</a> as an embedded software
 			developer.
 		</p>
+		<br />
 		<SocialList />
 	</section>
 	<section class="mt-10">
@@ -223,12 +270,7 @@ const courses: Array<{ name: string; coursePage: string }> = [
 						<p class="min-w-[120px] text-gray-600 dark:text-gray-400">{desc}</p>
 						<p>
 							{title}
-							<a
-								href={href}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="cactus-link inline-block"
-							>
+							<a href={href} target="_blank" rel="noopener noreferrer" class="external-link">
 								@{org}
 							</a>
 						</p>
@@ -249,7 +291,7 @@ const courses: Array<{ name: string; coursePage: string }> = [
 								href={href}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="cactus-link mb-2 inline-block sm:mb-0"
+								class="external-link mb-2 inline-block sm:mb-0"
 							>
 								{title}
 							</a>
@@ -276,8 +318,14 @@ const courses: Array<{ name: string; coursePage: string }> = [
 
 	<section aria-label="Bookshelf" class="mt-10">
 		<h2 class="title mb-4 text-xl">Bookshelf</h2>
-		<div class="flex flex-row gap-10" style="height: 10vw;">
-			{books.map((b) => <img src={b.img.src} alt={b.name} height="auto" width="auto" />)}
+		<div class="flex flex-row flex-wrap">
+			{
+				books.map((b) => (
+					<div class="book">
+						<img src={b.img.src} alt={b.name} />
+					</div>
+				))
+			}
 		</div>
 	</section>
 
@@ -285,11 +333,15 @@ const courses: Array<{ name: string; coursePage: string }> = [
 		<h2 class="title mb-4 text-xl">Coursework</h2>
 		<ul class="flex flex-wrap gap-2 text-accent">
 			{
-				courses.map(({ name, coursePage }) => (
+				courses.map(({ name, title, coursePage }) => (
 					<li>
-						<a class="flex items-center justify-center rounded-lg p-1" href={coursePage}>
+						<a
+							class="course-link flex items-center justify-center rounded-lg p-1"
+							href={coursePage}
+						>
 							{name}
 						</a>
+						<p class="course-name rounded-md border border-zinc-400 bg-bgColor">{title}</p>
 					</li>
 				))
 			}

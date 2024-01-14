@@ -41,4 +41,35 @@
 		image-rendering: pixelated;
 		-ms-interpolation-mode: nearest-neighbor;
 	}
+
+	.book img {
+		padding: 10px;
+		height: 10vw;
+	}
+
+	@media (max-width: 640px) {
+		.book img {
+			height: 35vw;
+		}
+	}
+
+	img {
+		overflow-clip-margin: content-box;
+		overflow: clip;
+	}
+
+	.external-link {
+		@apply cactus-link inline-block rounded-sm bg-link bg-opacity-30 hover:bg-opacity-40;
+	}
+
+	.course-name {
+		display: none;
+  		position: absolute;
+  		background-color: #1d1f20;
+  		padding: 10px;
+	}
+
+	.course-link:hover + .course-name {
+		display: block;
+	}
 }

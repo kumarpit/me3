@@ -5,11 +5,14 @@ import SocialList from "../SocialList.astro";
 const year = new Date().getFullYear();
 ---
 
-<footer
-	class="sm:text-s mt-auto flex w-full flex-col items-center justify-center gap-y-2 pb-4 pt-20 text-left align-top font-semibold text-gray-600 dark:text-gray-400 sm:flex-row sm:justify-between"
->
-	<SocialList />
-	<!-- <nav
+<footer class="pb-2 pt-10">
+	<hr />
+	<div
+		class="flex w-full flex-col items-center justify-center gap-y-2 pb-4 text-left align-top font-semibold text-gray-600 dark:text-gray-400 sm:flex-row sm:justify-between sm:text-xs"
+	>
+		<p>This site is based on the <a class="external-link">Astro Cactus</a> theme.</p>
+		<SocialList />
+		<!-- <nav
 		aria-label="More on this site"
 		class="flex gap-x-2 sm:gap-x-0 sm:divide-x sm:divide-gray-500"
 	>
@@ -24,4 +27,5 @@ const year = new Date().getFullYear();
 			))
 		}
 	</nav> -->
+	</div>
 </footer>

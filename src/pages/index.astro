@@ -241,9 +241,9 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 
 <PageLayout meta={{ title: "Home" }}>
 	<section>
-		<h1 class="title mb-6">Hey! I'm Arpit.</h1>
+		<h1 class="title mb-6">नमस्ते</h1>
 		<p class="mb-4">
-			I am a computer science and mathematics student at the <a
+			I'm Arpit. I am a computer science and mathematics student at the <a
 				href="https://www.ubc.ca/"
 				class="external-link">University of British Columbia</a
 			>. Here I write about my explorations in topics that interest me - usually pertaining to
@@ -331,12 +331,12 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 
 	<section aria-label="Coursework" class="mt-10">
 		<h2 class="title mb-4 text-xl">Coursework</h2>
-		<ul class="flex flex-wrap gap-2 text-accent">
+		<ul class="flex flex-wrap gap-2">
 			{
 				courses.map(({ name, title, coursePage }) => (
 					<li>
 						<a
-							class="course-link flex items-center justify-center rounded-lg p-1"
+							class="course-link flex items-center justify-center rounded-lg p-1 text-sm hover:underline"
 							href={coursePage}
 						>
 							{name}

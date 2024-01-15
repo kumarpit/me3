@@ -2,36 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+	font-family: 'neue';
+	src: url(../assets/fonts/NHaasGroteskTXPro-55Rg.ttf) format('truetype');
+  }
+  
+
 @layer base {
 	:root {
 		color-scheme: light;
 		--theme-bg: 0deg 0% 98%;
-		--theme-link: 172deg 18% 41%;
+		--theme-link: 240deg 100% 97%;
 		--theme-text: 0deg 0% 7%;
-		--theme-accent: 351deg 66% 48%;
-		--theme-accent-2: 0deg 0% 7%;
-		--theme-accent-3: 203deg 11% 15%;
-		--theme-quote: 351deg 66% 48%;
+		--theme-accent: 240deg 100% 97%;
+		--theme-accent-2: 0deg 0% 10%;
+		--theme-accent-3: 0deg 0% 20%;
+		--theme-quote: 0deg 0% 7%;
+		--theme-color-border: 0deg 0% 85%;
 	}
 
-	:root.dark {
+	/* :root.dark {
 		color-scheme: dark;
-		/* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
-		--theme-bg: 210deg 6% 12%;
-		--theme-link: 330deg 49% 67%;
-		--theme-text: 0deg 0% 93%;
-		--theme-accent: 159deg 64% 45%;
-		--theme-accent-2: 0deg 0% 93%;
-		--theme-accent-3: 220deg 3% 79%;
-		--theme-quote: 102deg 100% 86%;
-	}
+		https://tailwindcss.com/docs/customizing-colors#using-css-variables
+		--theme-bg: 60deg 2% 13%;
+		--theme-link: 178deg 98% 26%;
+		--theme-text: 0deg 0% 98%;
+		--theme-accent: 178deg 98% 26%;
+		--theme-accent-2: 0deg 0% 98%;
+		--theme-accent-3: 0deg 0% 90%;
+		--theme-quote: 0deg 0% 98%;
+	} */
 
 	html {
 		@apply scroll-smooth;
 	}
 
 	html body {
-		@apply mx-auto flex min-h-screen max-w-3xl flex-col bg-bgColor px-8 pt-16 font-bricolage text-base font-normal text-textColor antialiased;
+		@apply mx-auto flex min-h-screen max-w-3xl flex-col bg-bgColor px-8 pt-16 font-neue text-base font-normal text-textColor;
 	}
 
 	img {
@@ -42,9 +49,19 @@
 		-ms-interpolation-mode: nearest-neighbor;
 	}
 
-	.book img {
+
+	.book {
 		padding: 10px;
+	}
+
+	.book img {
 		height: 10vw;
+		box-shadow:
+      0 1px 1px hsl(0deg 0% 0% / 0.075),
+      0 2px 2px hsl(0deg 0% 0% / 0.075),
+      0 4px 4px hsl(0deg 0% 0% / 0.075),
+      0 8px 8px hsl(0deg 0% 0% / 0.075),
+      0 16px 16px hsl(0deg 0% 0% / 0.075);
 	}
 
 	@media (max-width: 640px) {
@@ -59,8 +76,9 @@
 	}
 
 	.external-link {
-		@apply cactus-link inline-block rounded-sm bg-link bg-opacity-30 hover:bg-opacity-40;
+		@apply rounded-sm bg-link;
 	}
+
 
 	.course-name {
 		display: none;
@@ -71,4 +89,15 @@
 	.course-link:hover + .course-name {
 		display: block;
 	}
+
+	.internal-link {
+		transition: background 300ms;
+		border-bottom: 1px solid hsl(0deg 0% 85%);
+	}
+
+	.internal-link:hover {
+		background: #fffaf1 !important;
+	
+		/* color: black !important; */
+	  }
 }

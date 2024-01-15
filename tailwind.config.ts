@@ -33,6 +33,8 @@ export default {
 				sans: [...fontFamily.sans],
 				serif: [...fontFamily.serif],
 				bricolage: ["Bricolage Grotesque", "sans-serif"],
+				inter: ["Inter", "sans-serif"],
+				neue: ["neue", "sans-serif"],
 			},
 			transitionProperty: {
 				height: "height",
@@ -57,7 +59,7 @@ export default {
 				DEFAULT: {
 					css: {
 						a: {
-							"@apply cactus-link no-underline": "",
+							"@apply no-underline": "",
 						},
 						strong: {
 							fontWeight: "700",

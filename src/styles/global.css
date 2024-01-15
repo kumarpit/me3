@@ -4,7 +4,7 @@
 
 @font-face {
 	font-family: 'neue';
-	src: url(../assets/fonts/NHaasGroteskTXPro-55Rg.ttf) format('truetype');
+	src: url(../assets/fonts/NHaasGroteskTXPro-65Rg.ttf) format('truetype');
   }
   
 
@@ -24,13 +24,14 @@
 	/* :root.dark {
 		color-scheme: dark;
 		https://tailwindcss.com/docs/customizing-colors#using-css-variables
-		--theme-bg: 60deg 2% 13%;
-		--theme-link: 178deg 98% 26%;
+		--theme-bg: 0deg 0% 20%;
+		--theme-link: 240deg 100% 97%;
 		--theme-text: 0deg 0% 98%;
-		--theme-accent: 178deg 98% 26%;
-		--theme-accent-2: 0deg 0% 98%;
-		--theme-accent-3: 0deg 0% 90%;
+		--theme-accent: 240deg 100% 97%;
+		--theme-accent-2: 0deg 0% 10%;
+		--theme-accent-3: 0deg 0% 20%;
 		--theme-quote: 0deg 0% 98%;
+		--theme-color-border: 0deg 0% 85%;
 	} */
 
 	html {

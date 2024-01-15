@@ -9,6 +9,8 @@ import bookImg2 from "@/assets/books/snow-crash-stephenson.jpg";
 import bookImg3 from "@/assets/books/plai-krishnamurthi.jpeg";
 import bookImg4 from "@/assets/books/crime-and-punishment-dostoevsky.webp";
 import bookImg5 from "@/assets/books/you-are-not-so-smart-mcraney.jpeg";
+import beach from "@/assets/art/beach.png";
+import maharaj from "@/assets/maharaj.png";
 
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
@@ -232,16 +234,19 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 		coursePage: "#",
 	},
 	{
-		name: "MATH317",
-		title: "Calculus IV",
+		name: "MATH316",
+		title: "Elementary Differential Equations II",
 		coursePage: "#",
 	},
 ];
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<section>
+	<section id="first">
+		<img src={beach.src} class="mb-10" alt="beach" />
+
 		<h1 class="title mb-7 text-4xl">नमस्ते</h1>
+
 		<p class="mb-4">
 			I'm Arpit. I am a computer science and mathematics student at the <a
 				href="https://www.ubc.ca/"

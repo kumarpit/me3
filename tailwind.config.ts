@@ -19,6 +19,22 @@ export default {
 	},
 	theme: {
 		extend: {
+			animation: {
+				"text-slide": "text-slide 12.5s cubic-bezier(0.83, 0, 0.17, 1) infinite",
+			},
+			keyframes: {
+				"text-slide": {
+					"0%, 33": {
+						transform: "translateY(0%)",
+					},
+					"33%, 66%": {
+						transform: "translateY(-55%)",
+					},
+					"66%, 100%": {
+						transform: "translateY(0%)",
+					},
+				},
+			},
 			colors: {
 				bgColor: "hsl(var(--theme-bg) / <alpha-value>)",
 				textColor: "hsl(var(--theme-text) / <alpha-value>)",

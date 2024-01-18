@@ -13,7 +13,7 @@ const { prevUrl, nextUrl } = Astro.props;
 	(prevUrl || nextUrl) && (
 		<nav class="mt-8 flex items-center gap-x-4">
 			{prevUrl && (
-				<a class="me-auto py-2 sm:hover:text-accent" href={prevUrl.url} data-astro-prefetch>
+				<a class="me-auto py-2 hover:underline" href={prevUrl.url} data-astro-prefetch>
 					{prevUrl.srLabel && <span class="sr-only">{prevUrl.srLabel}</span>}
 					{prevUrl.text ? prevUrl.text : "Previous"}
 				</a>

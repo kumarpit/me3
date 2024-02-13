@@ -1,7 +1,31 @@
 ---
 title: "Rust schenanigans 🦀"
 publishDate: "14 Jan 2024"
-description: "My notes for learning the rust language as well as an overview of my first project in Rust - implementing TCP (mostly)"
+description: "My notes from Brown's experimental Rust book"
 tags: ["Rust", "Notes"]
 ---
 
+The embedded systems team at Bionics uses Rust as their main programming languages. Rust has always been a languages I wanted to dive into and am excited to be learning more about it.
+
+## Understanding Ownership
+### What is ownership?
+> Ownership is Rust’s most unique feature and has deep implications for the rest of the language. It enables Rust to make memory safety guarantees without needing a garbage collector
+
+The "safety" of a program refers to the absence of undefined behaviour. Rust checks _at compile-time_ if a variable is defined on not. This is line with its goal of producing efficient binaries with as little as possible run-time checks. The *primary* goal of Rust is to ensure programs never have undefined behaviour. This is important since about [70% of reported security vulnerabilities](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/) in low-level systems are caused by memory corruption (a form of undefined behaviour). Catching undefined behaviour at compile-time is a secondary goal driven by the following motivations
+- If it doesn't compile, it won't appear in production
+- One fewer check at run-time, improving performance
+
+[Here is a list of all the behaviours that Rust considers undefined.](https://doc.rust-lang.org/reference/behavior-considered-undefined.html) The book focuses only on operations with memory.
+
+
+Variables live in frames - which is a mapping from variables to values within a single scope, such as a function. Frames are organized into a stack of currently called functions. After a function returns, Rust deallocates the function's frame. Boxes in Rust provides access to heap memory - values wrapped in `Box::new(...)` are stored in the heap. Stack frames are managed by Rust, just like most other languages. However, Rust does not allow manual management of the heap. For instance, there is no `free()` like that in C. This helps avoid a number of undefined behaviours (no more null pointer exceptions???). So how is heap memory (boxes in Rust terms) managed?
+> *Box deallocation principle (almost correct)*: If a variable is bound to a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
+
+But by this definition, we need to consider one (not so) subtle edge case. Consider the situation where we have two variables pointing to the same box. Assume both these variables go out of scope at the same time. Does this mean that Rust tries to free the same block memory twice? This is also undefined behaviour and to resolve this, comes in the idea of ownership.
+
+> *Box deallocation principle (fully correct)*: If a variable owns a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
+
+> *Moved heap data principle*: if a variable x moves ownership of heap data to another variable y, then x cannot be used after the move.
+
+
+### References and Borrowing

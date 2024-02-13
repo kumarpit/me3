@@ -1,0 +1,45 @@
+---
+title: "Book: Cassandra - The Definitive Guide"
+publishDate: "13 Feb 2024"
+description: "My notes from O'Reilly's Cassandra: The Definitive Guide"
+tags: ["Cassandra", "Notes"]
+---
+
+Cassandra is the primary database that I am going to be working with at Visier. Having talked to a few colleagues about Cassandra, it seems like it is a rather unique database.
+
+## Chapter 1: Introducting Cassandra
+The chapter starts of with the quote
+> If I asked people what they wanted, they would have said faster horses. -- Henry Ford
+
+What are some of the problems with the relational model?
+- Joins are inherent in any relatively normalized database of even a modest size, and joins can be slow.
+- The use of transactions means that, under heavy loads, users start queuing up, waiting for their turn at making reads/writes.
+
+A few commonly used strategies to mitigate the above mentioned issues:
+- Vertical scaling - i.e more compute power
+- Clusters - but now you have to deal with data replication and consistency
+- Try to fine tune indexes - but difficult to find any subtantial improvement (considering the data model was originally well-designed).
+- Caching (might include distributed cache, but this again brings up the issue of maintaining consistency)
+- Denormalization - since we know the primary query paths, we can make the data look more like the query and avoid joins.
+
+This is what the quote at the start of the chapter was refering to.
+
+### Sharding and shared-nothing architecture
+> If you can't split it, you can't scale it -- Randy Shoup (Distinguished Architect, ebay)
+
+Another way to scale a relational database - instead of having all instances of the database store all of the data, you partition the data and host them each separately. It is really important to pick a good a key to shard on. There are three basic strategies for determining shard structure:
+- Feature-based shard or functional segmentation
+Using this strategy, the data is split not by dividing records in a single table, but rather by splitting into separate databases the features that don’t overlap with each other very much. For instance, instead of splitting on customer name, we could store customer data in one shard and say, product data on another shard.
+
+- Key-based sharding
+Find a key that will evenly distribute data across shards.
+
+- Lookup table
+Like a hash-table - each query goes through this node which directs you to the shard containing your data. This approach incurs a performance hit and is a single-point of failure.
+
+Sharding can be seen as a "shared-nothing" architecture that's specific to databases. A shared-nothing architecture is one where there is no centralized (or shared) state, but each node in a distributed system is independent - thus, there is no client contention for shared resources. [Here](https://dsf.berkeley.edu/papers/hpts85-nothing.pdf) is the original paper on shared-nothing architecture.
+
+### The Cassandra Elevator Pitch
+> Apache Cassandra is an open source, distributed, decentralized, elastically scalable, highly available, fault-tolerant, tuneably consistent, column-oriented database that bases its distribution design on Amazon’s Dynamo and its data model on Google’s Bigtable. Created at Facebook, it is now used at some of the most popular sites on the Web.
+
+

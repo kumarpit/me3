@@ -1,23 +1,21 @@
 ---
 import PageLayout from "@/layouts/Base";
 import PostPreview from "@/components/blog/PostPreview";
-import SocialList from "@/components/SocialList";
 import { getAllPosts, sortMDByDate } from "@/utils";
 
 import bookImg from "@/assets/books/fp-in-scala-manning.png";
-import bookImg2 from "@/assets/books/snow-crash-stephenson.jpg";
-import bookImg3 from "@/assets/books/plai-krishnamurthi.jpeg";
-import bookImg4 from "@/assets/books/crime-and-punishment-dostoevsky.webp";
-import bookImg5 from "@/assets/books/you-are-not-so-smart-mcraney.jpeg";
-import refactoringImg from "@/assets/books/refactoring2.jpeg"
-import beach from "@/assets/art/beach.png";
-import maharaj from "@/assets/maharaj.png";
 
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
 const experiences: Array<{ title: string; desc: string; org: string; href: string }> = [
+	{
+		title: "Undergraduate Teaching Assistant",
+		org: "UBC",
+		desc: "Fall 2024",
+		href: "https://astro.build",
+	},
 	{
 		title: "Site Reliability Engineering Intern",
 		org: "Visier",
@@ -32,20 +30,15 @@ const experiences: Array<{ title: string; desc: string; org: string; href: strin
 	},
 ];
 
-const projects: Array<{ title: string; desc: string; href: string }> = [
+const designTeams: Array<{ title: string; desc: string; href: string }> = [
 	{
-		title: "Backtrack",
-		desc: "A generalized search library for node.js",
-		href: "https://github.com/kumarpit/backtrack",
+		title: "Bionics",
+		desc: "Writing on-board software for a robotic prosthetic arm",
+		href: "https://github.com/kumarpit/basis",
 	},
 	{
-		title: "Star-Crossed",
-		desc: "A 2D top-down bullet hell (and dating sim?) in Unity",
-		href: "https://github.com/studi6/star-crossed",
-	},
-	{
-		title: "Basis",
-		desc: "A linear algebra library for C",
+		title: "Launchpad",
+		desc: 'Built a personal finance management app called "Ledge-it"',
 		href: "https://github.com/kumarpit/basis",
 	},
 ];
@@ -53,34 +46,14 @@ const projects: Array<{ title: string; desc: string; href: string }> = [
 const books: Array<{ name: string; author: string; img: ImageMetadata }> = [
 	{
 		name: "Functional Programming in Scala",
-		author: "Manning",
+		author: "Chiusano and Bjarnason",
 		img: bookImg,
 	},
 	{
-		name: "Snow Crash",
-		author: "Neal Stephenson",
-		img: bookImg2,
+		name: "Think",
+		author: "Simon Blackburn",
+		img: bookImg,
 	},
-	{
-		name: "Programming Languages: Application and Interpretation",
-		author: "Shriram Krishnamurthi",
-		img: bookImg3,
-	},
-	{
-		name: "Crime and Punishment",
-		author: "Fyodor Dostoevsky",
-		img: bookImg4,
-	},
-	{
-		name: "You are not so smart",
-		author: "David McRaney",
-		img: bookImg5,
-	},
-  {
-      name: "Refactoring",
-      author: "Martin Fowler",
-      img: refactoringImg,
-    }
 ];
 
 const courses: Array<{ name: string; title: string; coursePage: string }> = [
@@ -244,6 +217,31 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 		title: "Elementary Differential Equations II",
 		coursePage: "#",
 	},
+	{
+		name: "PHIL375*",
+		title: "Philosophy and Literature",
+		coursePage: "#",
+	},
+	{
+		name: "MATH446*",
+		title: "Topics in the History of Mathematics I",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC436A*",
+		title: "OS Design and Implementation",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC427*",
+		title: "Video Game Programming",
+		coursePage: "#",
+	},
+	{
+		name: "CPSC421*",
+		title: "Introduction to the Theory of Computing",
+		coursePage: "#",
+	},
 ];
 ---
 
@@ -259,22 +257,13 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 		<h1 class="title mb-7 mt-5 text-4xl">नमस्ते</h1>
 
 		<p class="mb-4">
-			I'm Arpit. I am a computer science and mathematics student at the <a
+			My name's Arpit. I am a computer science and mathematics student at the <a
 				href="https://www.ubc.ca/"
 				class="external-link">University of British Columbia</a
-			>. Here I write about my explorations in topics that interest me - usually pertaining to
-			computer science and mathematics. A lot on this site is still under construction.
-			<br />
-			<br />
-			 I'm interested in learning about system design, language-oriented programming and graphics.
-			In my free time, I'm exploring game development in Unity at <a
-				href="https://www.ubcgamedev.com"
-				class="external-link">UBC GameDev</a
-			> and contributing to
-			<a href="https://ubcbionics.com" class="external-link">UBC Bionics</a> as an embedded software
-			developer.
+			>. Here I write about my explorations in topics that interest me - mainly system design
+			principles, language-oriented programming and art. A lot on this site is still under
+			construction.
 		</p>
-		<br />
 		<p class="mb-4">
 			Find me on <a href="https://github.com/kumarpit" class="external-link">github</a>, <a
 				href="https://www.linkedin.com/in/krarpit/"
@@ -304,10 +293,10 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 	</section>
 
 	<section class="mt-10">
-		<h2 class="title mb-4 text-xl">Featured Projects</h2>
+		<h2 class="title mb-4 text-xl">Engineering Design Teams @UBC</h2>
 		<ul class="space-y-4 sm:space-y-2">
 			{
-				projects.map(({ title, desc, href }) => (
+				designTeams.map(({ title, desc, href }) => (
 					<li class="flex flex-col gap-x-2 sm:flex-row">
 						<div class="min-w-[120px]">
 							<a
@@ -340,13 +329,19 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 	</section>
 
 	<section aria-label="Bookshelf" class="mt-10">
-		<h2 class="title mb-4 text-xl">Bookshelf</h2>
-		<div class="flex flex-row flex-wrap">
+		<h2 class="title mb-4 text-xl">What I'm reading</h2>
+		<div class="space-y-4 sm:space-y-2">
 			{
-				books.map((b) => (
-					<div class="book">
-						<img src={b.img.src} alt={b.name} />
-					</div>
+				books.map(({ name, author }) => (
+					<li class="flex flex-col gap-x-2 sm:flex-row">
+						<p>
+							{name}
+							{/* <a href={href} target="_blank" rel="noopener noreferrer" class="external-link">
+								@{org}
+							</a> */}
+						</p>
+						<p class="min-w-[120px] text-gray-600 dark:text-gray-400">by {author}</p>
+					</li>
 				))
 			}
 		</div>
@@ -369,5 +364,7 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 				))
 			}
 		</ul>
+		<br />
+		<p>* = currently taking</p>
 	</section>
 </PageLayout>

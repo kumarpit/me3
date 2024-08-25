@@ -163,7 +163,7 @@ The only place were we apply the `bounce` lambdas is in the `loop-trampoline` pr
 
 > A thunk refers to an argument-less function that mimics lazy evaluations. For example, the procedure `(define (lazy-sum) (+ 1 2))` is a thunk. By capturing the state of our recursive function at each step, we are creating thunks that get evaluated by the `loop-trampoline` procedure.
 
-```racket ins={15}
+```racket {15}
 (define (apply/th th)
   (match th
     [p #:when (procedure? p) (p)]))

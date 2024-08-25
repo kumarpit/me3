@@ -161,7 +161,9 @@ Notice that we use lambda functions in the `bounce` constructor. C does not have
 
 The only place were we apply the `bounce` lambdas is in the `loop-trampoline` procedure. So, we create a new `apply/th` (read: apply thunk) procedure to abstract away lambda application.
 
-```racket
+> A thunk refers to an argument-less function that mimics lazy evaluations. For example, the procedure `(define (lazy-sum) (+ 1 2))` is a thunk. By capturing the state of our recursive function at each step, we are creating thunks that get evaluated by the `loop-trampoline` procedure.
+
+```racket ins={15}
 (define (apply/th th)
   (match th
     [p #:when (procedure? p) (p)]))
@@ -176,7 +178,7 @@ The only place were we apply the `bounce` lambdas is in the `loop-trampoline` pr
       (set! t t0)
       (while (bounce? t)
              (let ([c (bounce-p t)])
-               (set! t (apply/th c)))) ;; <- this is the only change
+               (set! t (apply/th c))))
       ;; t is now a dismount
       (dismount-v t))))
 ```
@@ -225,8 +227,7 @@ Now we update our `apply/th` procedure to handle these two thunk variants.
 Now we have a trampolined, defunctionalized version of the Euclidean algorithm. This can now easily be translated to C.
 
 ## Result
-```c
-// euclidean.h
+```c title="euclidean.h"
 struct _thunk {
   enum { b_gt_a, b_lte_a } tag;
   struct {
@@ -249,14 +250,13 @@ thunk *th_b_gt_a(int a, int b);
 thunk *th_b_lte_a(int a, int b);
 
 trampoline *apply_th(thunk *th);
-trampoline *euclid_alg_t(int a, int b);
+trampoline *euclid_alg_tr(int a, int b);
 
 int loop_trampoline(trampoline *tr);
 int euclid_alg(int a, int b);
 ```
 
-```c
-// euclidean.c
+```c title="euclidean.c"
 #include "euclidean.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -277,7 +277,7 @@ thunk *th_b_lte_a(int a, int b) {
   return data;
 }
 
-trampoline *euclid_alg_t(int a, int b) {
+trampoline *euclid_alg_tr(int a, int b) {
   trampoline *data = (trampoline *)malloc(sizeof(trampoline));
   if (b > a) {
     thunk *th = th_b_gt_a(a, b);

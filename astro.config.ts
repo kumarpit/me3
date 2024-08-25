@@ -9,13 +9,14 @@ import { remarkReadingTime } from "./src/utils/remark-reading-time";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import racketGrammar from "./src/assets/syntaxes/racket.tmLanguage.json";
-
+import expressiveCode from "astro-expressive-code";
 const racket = {
   id: "Racket",
   scopeName: "source.racket",
   grammar: racketGrammar,
-  aliases: ["rkt", "racket"],
+  aliases: ["rkt", "racket"]
 };
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,50 +24,49 @@ export default defineConfig({
   site: "https://kumarpit.github.io",
   markdown: {
     remarkPlugins: [remarkUnwrapImages, remarkReadingTime, remarkMath],
-    rehypePlugins: [
-      [rehypeExternalLinks, { target: "_blank", rel: ["nofollow, noopener, noreferrer"] }],
-      [rehypeKatex, {}],
-    ],
-    remarkRehype: { footnoteLabelProperties: { className: [""] } },
+    rehypePlugins: [[rehypeExternalLinks, {
+      target: "_blank",
+      rel: ["nofollow, noopener, noreferrer"]
+    }], [rehypeKatex, {}]],
+    remarkRehype: {
+      footnoteLabelProperties: {
+        className: [""]
+      }
+    },
     shikiConfig: {
       theme: "slack-dark",
       wrap: true,
-      langs: ['c', racket],
-    },
+      langs: ['c', racket]
+    }
   },
-  integrations: [
-    mdx({}),
-    tailwind({
-      applyBaseStyles: false,
-    }),
-    sitemap(),
-  ],
+  integrations: [expressiveCode(), mdx({}), tailwind({
+    applyBaseStyles: false
+  }), sitemap()],
   image: {
-    domains: ["webmention.io"],
+    domains: ["webmention.io"]
   },
   // https://docs.astro.build/en/guides/prefetch/
   prefetch: true,
   vite: {
     plugins: [rawFonts([".ttf"])],
     optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
-    },
-  },
+      exclude: ["@resvg/resvg-js"]
+    }
+  }
 });
-
 function rawFonts(ext: Array<string>) {
   return {
     name: "vite-plugin-raw-fonts",
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore:next-line
     transform(_, id) {
-      if (ext.some((e) => id.endsWith(e))) {
+      if (ext.some(e => id.endsWith(e))) {
         const buffer = fs.readFileSync(id);
         return {
           code: `export default ${JSON.stringify(buffer)}`,
-          map: null,
+          map: null
         };
       }
-    },
+    }
   };
 }

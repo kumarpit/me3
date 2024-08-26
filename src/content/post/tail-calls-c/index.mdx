@@ -39,7 +39,7 @@ After the first call to `sum`, our computation can be expressed as `(+ 1 (sum (l
 <6
 ```
 
-Notice how each recursive call has to "wait" for all subsequent recursive calls to return before being able to compute a value. This buildup is not ideal. This was just a small example, but imagine if our list was long enough to fill all available memory - we would run out of stack space well before we are able to evaluate our result. Understanding tail recursion can help us avoid this unneccesary build up on the stack. Consider the following modified `sum` procedure.
+This stack buildup is not ideal. This was just a small example, but imagine if our list was long enough to fill all available memory - we would run out of stack space well before we are able to evaluate our result. Understanding tail recursion can help us avoid this unneccesary build up on the stack. Consider the following modified `sum` procedure.
 
 ```racket
 ;; (listof Number) -> Number
@@ -59,7 +59,7 @@ Notice how each recursive call has to "wait" for all subsequent recursive calls 
 (test (sum (list 1 2 3)) 6)
 ```
 
-Here, we use an accumlator to store the sum so far. We essentially shift the storage of the context to a variable from the stack. Thus at any given time we are occupying a only a single stack frame since our recursive calls don't need to wait for subsequent recursive calls. The trace of `sum-acc` reflects this change.
+Here, we use an accumlator to store the sum so far. Instead of using the stack to store the context of pending computations, we use the accumlator variable. Thus at any given time we are occupying a only a single stack frame since our recursive calls don't need to wait. The trace of `sum-acc` reflects this change.
 
 ```racket
 >(sum-acc '(1 2 3) 0)
@@ -69,7 +69,7 @@ Here, we use an accumlator to store the sum so far. We essentially shift the sto
 <6
 ```
 
-Racket has "proper" tail calls, i.e it does not accumulate any stack space when making a recursive call that appears at a tail position. This means that the following Racket program will simply run forever:
+Racket has "proper" tail calls, i.e it does not accumulate any stack space when making a recursive call that appears at a tail position. This means that the following tail-recursive Racket program will simply run forever:
 
 ```racket
 (define (tick) (begin
@@ -101,7 +101,7 @@ C, on the other hand, accumulates stack space even with tail recursive procedure
 
 ## Trampolining
 
-We will employ a technique called "trampolining" to implement "proper" tail calls in C. The idea is simple - instead of recursing, we modify our algorithm to return its current state after every step. Then, we develop a dispatch function that determines if we need to continue our computation based on this state. Here is a trampolined implementation of `euclid-alg` in Racket:
+We will employ a technique called "trampolining" to implement "proper" tail calls in C. A trampoline is nothing but a wrapper around the recursive function. In regular recursion, we have a function calling itself from within. In trampolined recursion, the function doesn't call itself, instead it returns another function (thus completing the current execution of our function) and this returned function again calls our recursive function. Then we develop a trampoline loop that keeps calling the function returned by our trampolined recursive function until computation is completed. In other words, control flow goes from our recursive function to the trampoline loop and back to the recursive function again and again (hence the name trampolining!). Here is a trampolined implementation of `euclid-alg` in Racket:
 
 ```racket
 (define-type trampoline
@@ -112,7 +112,7 @@ We will employ a technique called "trampolining" to implement "proper" tail call
 ;; - (bounce ( -> (trampolineof X)))
 ;; - (dismount X)
 
-;; A simple while loop implementation
+;; A simple while loop implementation (to get a more C-like structure)
 ;; ( -> Boolean) ( -> Void) -> Void
 (define (while-fn pred do)
   (when (pred)
@@ -141,20 +141,20 @@ We will employ a technique called "trampolining" to implement "proper" tail call
 ;; Natural Natural -> (trampolineof Natural)
 ;; runs the Euclidean algorithm on scalars a and b
 (define (euclid-alg a b)
-  (local [(define (euclid-alg/t a b)
+  (local [(define (euclid-alg/tr a b)
   (if (> b a)
-      (bounce (λ () (euclid-alg/t b a)))
+      (bounce (λ () (euclid-alg/tr b a)))
       (if (= b 0)
           (dismount a)
-          (bounce (λ () (euclid-alg/t b (modulo a b)))))))]
-    (loop-trampoline (euclid-alg/t a b))))
+          (bounce (λ () (euclid-alg/tr b (modulo a b)))))))]
+    (loop-trampoline (euclid-alg/tr a b))))
 ```
 Notice how all recursive calls are represented by the `bounce` data type and the base case is represented by `dismount`. Using the information encapsulated by these data representations, the `loop-trampoline` procedure is able to determine whether or not the computation is complete.
 
 
 ## Defunctionalization
 
-Notice that we use lambda functions in the `bounce` constructor. C does not have lambdas, and so we aren't quite ready to translate this Racket code to C. We need to get remove any usage of first-class of functions, a process refered to as "defunctionalization". Defunctionalization entails two key steps:
+Notice that we use lambda functions in the `bounce` constructor. C does not have lambdas, and so we aren't quite ready to translate this Racket code to C. We need to remove any usage of first-class of functions, a process refered to as "defunctionalization". Defunctionalization entails two key steps:
 
 - Create abstractions for all places a lambda is being applied or constructed
 - Then replace the lambda with a data representation
@@ -163,7 +163,7 @@ The only place were we apply the `bounce` lambdas is in the `loop-trampoline` pr
 
 > A thunk refers to an argument-less function that mimics lazy evaluations. For example, the procedure `(define (lazy-sum) (+ 1 2))` is a thunk. By capturing the state of our recursive function at each step, we are creating thunks that get evaluated by the `loop-trampoline` procedure.
 
-```racket {15}
+```racket ins={1-3} {15}
 (define (apply/th th)
   (match th
     [p #:when (procedure? p) (p)]))
@@ -183,22 +183,22 @@ The only place were we apply the `bounce` lambdas is in the `loop-trampoline` pr
       (dismount-v t))))
 ```
 
-The `bounce` lambdas are created in the `euclid-alg/t` procedure. We introduce new procedures to abstract away these constructions.
+The `bounce` lambdas are created in the `euclid-alg/tr` procedure. We introduce new procedures to abstract away these constructions.
 
-```racket
+```racket ins={1-4, 6-9} {15, 17, 18}
 ;; Natural Natural -> ( -> (trampolineof Natural))
 ;; returns the thunk encapsulating the work to be done for the b>a case
 (define (b>a/th a b)
-  (λ () (euclid-alg/t b a)))
+  (λ () (euclid-alg/tr b a)))
 
 ;; Natural Natural -> ( -> (trampolineof Natural))
 ;; returns the thunk encapsulating the work to be done for the case when b<=a (b != 0)
 (define (b<=a/th a b)
-  (λ () (euclid-alg/t b (modulo a b))))
+  (λ () (euclid-alg/tr b (modulo a b))))
 
 ;; Natural Natural -> ( -> (trampolineof Natural))
 ;; trampolined euclid-alg
-(define (euclid-alg/t a b)
+(define (euclid-alg/tr a b)
   (if (> b a)
       (bounce (b>a/th a b))
       (if (= b 0)
@@ -220,13 +220,13 @@ Now we update our `apply/th` procedure to handle these two thunk variants.
 ;; dispatches the appropriate thunk for euclid-alg
 (define (apply/th th)
   (type-case thunk th
-    [b>a  (a b) (euclid-alg/t b a)]
-    [b<=a (a b) (euclid-alg/t b (modulo a b))]))
+    [b>a  (a b) (euclid-alg/tr b a)]
+    [b<=a (a b) (euclid-alg/tr b (modulo a b))]))
 ```
 
-Now we have a trampolined, defunctionalized version of the Euclidean algorithm. This can now easily be translated to C.
+Now we have a trampolined, defunctionalized version of the Euclidean algorithm. This can easily be translated to C.
 
-## Result
+## Euclidean algorithm in C with proper tail calls
 ```c title="euclidean.h"
 struct _thunk {
   enum { b_gt_a, b_lte_a } tag;
@@ -250,7 +250,7 @@ thunk *th_b_gt_a(int a, int b);
 thunk *th_b_lte_a(int a, int b);
 
 trampoline *apply_th(thunk *th);
-trampoline *euclid_alg_tr(int a, int b);
+trampoline *tr_euclid_alg(int a, int b);
 
 int loop_trampoline(trampoline *tr);
 int euclid_alg(int a, int b);
@@ -280,7 +280,7 @@ thunk *th_b_lte_a(int a, int b) {
   return data;
 }
 
-trampoline *euclid_alg_tr(int a, int b) {
+trampoline *tr_euclid_alg(int a, int b) {
   trampoline *data = (trampoline *)malloc(sizeof(trampoline));
   if (b > a) {
     thunk *th = th_b_gt_a(a, b);
@@ -305,9 +305,9 @@ trampoline *apply_th(thunk *th) {
   int a = th->values.a;
   int b = th->values.b;
   if (th->tag == b_gt_a) {
-    return euclid_alg_t(b, a);
+    return tr_euclid_alg(b, a);
   } else {
-    return euclid_alg_t(b, a % b);
+    return tr_euclid_alg(b, a % b);
   }
 }
 
@@ -319,9 +319,51 @@ int loop_trampoline(trampoline *tr) {
   return current->value.result;
 }
 
-int euclid_alg(int a, int b) { return loop_trampoline(euclid_alg_t(a, b)); }
+int euclid_alg(int a, int b) { return loop_trampoline(tr_euclid_alg(a, b)); }
 
 int main() { assert(euclid_alg(54, 21) == 3); }
 ```
 
-
+## Continuation Passing Style
+This is great, we can now run any tail recursive function in C without blowing the stack. But what if our function cannot easily be expressed as tail recursive? A common exmaple of such functions are those which aren't singly recursive (i.e make two or more recursive invocations at a time). One such case occurs in the optimal solution to the famous towers of Hanoi problem. Here is a solution to the towers of Hanoi problem in Racket:
+```racket
+;; Natural Natural Natural Natural -> (listof S-Exp)
+;; returns the list of steps to solve the tower of Hanoi problem with n disks
+(define (hanoi n from to other)
+  (match n
+    [n #:when (< n 0) (error `(number of disks ,n cannot be less than 0))]
+    [0 '()]
+    [else (append (hanoi (- n 1)
+                         from
+                         other
+                         to)
+                  `((move disk ,n from ,from to ,to))
+                  (hanoi (- n 1)
+                         other
+                         to
+                         from))]))
+```
+Notice how we need to make two recursive calls in order to solve this problem. Since we have two recursive calls, it is clearly not possible to have both of them be in a tail position. However, we can achieve tail recursion by converting this procedure to use continuation passing style. There are numerous resources online that will be able to explain CPSing much better than I can (for instance, see [this article](https://matt.might.net/articles/by-example-continuation-passing-style/)). Here is what a CPSed solution to the towers of Hanoi look like:
+```racket {6, 12-20}
+;; Natural Natural Natural Natural Continuation -> (listof S-Exp)
+;; returns the list of steps to solve the towers of Hanoi problem with n disks -- using CPS!
+(define (hanoi/cps n from to other k)
+  (match n
+    [n #:when (< n 0) (error `(number of disks ,n cannot be less than 0!))]
+    [0 (k '())]
+    [else
+     (hanoi/cps (- n 1)
+                from
+                other
+                to
+                (λ (v0)
+                  (hanoi/cps (- n 1)
+                             other
+                             to
+                             from
+                             (λ (v1)
+                               (k (append v0
+                                          `((move disk ,n from ,from to ,to))
+                                          v1))))))]))
+```
+Now we can use trampolining and defunctionalization to be able to implement a "proper" tail recursive solution to the towers of Hanoi in C (or really any other language that doesn't have proper tail calls).

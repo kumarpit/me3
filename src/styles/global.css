@@ -6,7 +6,7 @@
 	font-family: 'neue';
 	src: url(../assets/fonts/NHaasGroteskTXPro-65Rg.ttf) format('truetype');
   }
-  
+
 
 @layer base {
 	:root {
@@ -78,7 +78,7 @@
 
 	.external-link {
 		@apply rounded-sm bg-link;
-		border-bottom: 1px solid #8a88e6;
+		border-bottom: 1px solid #050505;
 	}
 
 
@@ -99,7 +99,7 @@
 
 	.internal-link:hover {
 		background: #fffaf1 !important;
-	
+
 		/* color: black !important; */
 	  }
 

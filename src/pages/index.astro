@@ -11,6 +11,12 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
 const experiences: Array<{ title: string; desc: string; org: string; href: string }> = [
 	{
+		title: "Incoming Software Engineering Intern",
+		org: "SAP",
+		desc: "Winter 2025",
+		href: "https://astro.build",
+	},
+	{
 		title: "Undergraduate Teaching Assistant",
 		org: "UBC",
 		desc: "Fall 2024",
@@ -218,13 +224,8 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 		coursePage: "#",
 	},
 	{
-		name: "PHIL375*",
-		title: "Philosophy and Literature",
-		coursePage: "#",
-	},
-	{
-		name: "MATH446*",
-		title: "Topics in the History of Mathematics I",
+		name: "MATH317*",
+		title: "Calculus IV",
 		coursePage: "#",
 	},
 	{
@@ -238,8 +239,8 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 		coursePage: "#",
 	},
 	{
-		name: "CPSC421*",
-		title: "Introduction to the Theory of Computing",
+		name: "CPSC418*",
+		title: "Parallel Computation",
 		coursePage: "#",
 	},
 ];
@@ -248,11 +249,11 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 <PageLayout meta={{ title: "Home" }}>
 	<section id="first">
 		<!-- <div class="h-30 mb-5 overflow-hidden">
-			<ul class="animate-text-slide">
-				<li><h1 class="title mb-7 text-4xl">नमस्ते</h1></li>
-				<li><h1 class="title mb-7 text-4xl">Hello</h1></li>
-			</ul>
-		</div> -->
+<ul class="animate-text-slide">
+<li><h1 class="title mb-7 text-4xl">नमस्ते</h1></li>
+<li><h1 class="title mb-7 text-4xl">Hello</h1></li>
+</ul>
+</div> -->
 
 		<h1 class="title mb-7 mt-5 text-4xl">नमस्ते</h1>
 
@@ -337,8 +338,8 @@ const courses: Array<{ name: string; title: string; coursePage: string }> = [
 						<p>
 							{name}
 							{/* <a href={href} target="_blank" rel="noopener noreferrer" class="external-link">
-								@{org}
-							</a> */}
+            @{org}
+            </a> */}
 						</p>
 						<p class="min-w-[120px] text-gray-600 dark:text-gray-400">by {author}</p>
 					</li>
